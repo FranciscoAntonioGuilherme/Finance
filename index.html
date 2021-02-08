@@ -54,7 +54,7 @@
             <h2 class="sr-only">Transações</h2>
 
             <a href="#"
-            onclick="Modal.open()";
+            onclick="Modal.open()"
             class="button new">+ Nova Transção</a>
 
             <table id="data-table">
@@ -96,7 +96,7 @@
         </section>
     </main>
 
-    <div class="modal-overlay active">
+    <div class="modal-overlay">
         <div class="modal">
             <div id="form">
                 <h2>Nova Transação</h2>
@@ -157,20 +157,23 @@
                 open(){
                     // Abrir modal
                     // Adicionar a class active ao modal
+                    //document.querySlector('.modal-overlay').classList.add('active')
                     document
-                        .querySlector('.modal-overlay')
+                        .querySelector('.modal-overlay')
                         .classList
                         .add('active')
+
                 },
                 close(){
                     // Fechar o modal
                     // Remover a class active do modal
                     document
-                        .querySlector('.modal-overlay')
-                        .classList
-                        .remove('active')
+                    .querySelector('.modal-overlay')
+                    .classList
+                    .remove('active')
                 }
             }
+
         </script>    
 </body>
 </html>
