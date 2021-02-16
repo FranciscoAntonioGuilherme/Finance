@@ -64,6 +64,8 @@
                         <th>Valor</th>
                         <th>Data</th>
                         <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -121,6 +123,60 @@
                         href="#"
                         class="button cancel">Cancelar</a>
                         <button>Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay-view">
+        <div class="modal">
+            <div id="form-view">
+                <h2>Visualização</h2>
+                <form>
+                    <div class="input-group">
+                        <label
+                            class="sr-only"
+                            for="description">Descrição</label>
+                        <input
+                            type="text"
+                            id="description-view"
+                            name="description"
+                            placeholder="Descrição"
+                            readonly
+                        />
+                    </div>
+
+                    <div class="input-group">
+                        <label
+                            class="sr-only"
+                            for="amount">Valor</label>
+                        <input
+                            type="number"
+                            id="amount-view"
+                            name="amount"
+                            placeholder="0,00"
+                            readonly
+                        />
+                        <small class="help">Use o sinal - (negativo) para despesas e , (virgula) para casa decimal.</small>
+                    </div>
+
+                    <div class="input-group">
+                        <label
+                            class="sr-only"
+                            for="date">Data</label>
+                        <input
+                            id="date-view"
+                            name="date"
+                            readonly
+                        />
+                    </div>
+
+                    <div class="input-group actions">
+                        <a
+                        onclick="ModalView.close()"
+                        href="#"
+                        class="button cancel">Fechar</a>
                     </div>
                 </form>
             </div>

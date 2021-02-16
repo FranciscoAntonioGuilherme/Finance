@@ -18,6 +18,17 @@ const Modal = {
     }
 }
 
+const ModalView = {
+    close(){
+        // Fechar o modal
+        // Remover a class active do modal
+        document
+        .querySelector('.modal-overlay-view')
+        .classList
+        .remove('active')
+    }
+}
+
 const Storage = {
     get() {
         return JSON.parse(localStorage.getItem("dev.finances:transactions")) ||
@@ -36,6 +47,15 @@ const Transaction = {
         Transaction.all.push(transaction)
 
         App.reload()
+    },
+
+    view(index) {
+        document.querySelector('.modal-overlay-view').classList.add('active')
+        let viewingData = Transaction.all[index]
+        document.querySelector('#description-view').value = viewingData.description
+        document.querySelector('#amount-view').value = viewingData.amount
+        document.querySelector('#date-view').value = viewingData.date
+        console.log(viewingData)
     },
 
     remove(index) {
@@ -94,6 +114,12 @@ const DOM = {
             <td class="description">${transaction.description}</td>
             <td class="${CSSclass}">${amount}</td>
             <td class="date">${transaction.date}</td>
+            <td>
+                <button onclick="Transaction.view(${index})">Visualizar</button>
+            </td>
+            <td>
+                <button>Editar</button>
+            </td>
             <td>
                 <img onclick="Transaction.remove(${index})" src="./assets/minus.svg" alt="Remover transação">
             </td>
