@@ -1,3 +1,5 @@
+let indexAtual = ""
+
 const Modal = {
     open(){
         // Abrir modal
@@ -29,6 +31,17 @@ const ModalView = {
     }
 }
 
+const ModalEdit = {
+    close(){
+        // Fechar o modal
+        // Remover a class active do modal
+        document
+        .querySelector('.modal-overlay-edit')
+        .classList
+        .remove('active')
+    }
+}
+
 const Storage = {
     get() {
         return JSON.parse(localStorage.getItem("dev.finances:transactions")) ||
@@ -49,6 +62,14 @@ const Transaction = {
         App.reload()
     },
 
+    editValue(transaction) {
+        // Transaction.all.push(transaction)
+        Transaction.all[indexAtual] = transaction
+        console.log(Transaction.all[indexAtual])
+        console.log(transaction)
+        App.reload()
+    },
+
     view(index) {
         document.querySelector('.modal-overlay-view').classList.add('active')
         let viewingData = Transaction.all[index]
@@ -56,6 +77,20 @@ const Transaction = {
         document.querySelector('#amount-view').value = viewingData.amount
         document.querySelector('#date-view').value = viewingData.date
         console.log(viewingData)
+    },
+
+    edit(index) {
+        document.querySelector('.modal-overlay-edit').classList.add('active')
+        let viewingData = Transaction.all[index]
+        document.querySelector('#description-edit').value = viewingData.description
+        document.querySelector('#amount-edit').value = viewingData.amount / 100
+        viewingDataEdit = Utils.formatDateEdit(viewingData.date)
+        document.querySelector('#date-edit').value = viewingDataEdit
+        console.log(indexAtual)
+        indexAtual = index
+        console.log(indexAtual)
+        console.log(viewingData)
+        console.log(viewingDataEdit)
     },
 
     remove(index) {
@@ -118,7 +153,7 @@ const DOM = {
                 <button onclick="Transaction.view(${index})">Visualizar</button>
             </td>
             <td>
-                <button>Editar</button>
+                <button onclick="Transaction.edit(${index})">Editar</button>
             </td>
             <td>
                 <img onclick="Transaction.remove(${index})" src="./assets/minus.svg" alt="Remover transação">
@@ -155,6 +190,12 @@ const Utils = {
     formatDate(date) {
         const splittedDate = date.split("-")
         return `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`
+    },
+
+    formatDateEdit(date) {
+        const splittedDate = date.split("/")
+        return `${splittedDate[2]}-${splittedDate[1]}-${splittedDate[0]}`
+
     },
 
     formatCurrency(value) {
@@ -235,8 +276,71 @@ const Form = {
         } catch (error) {
             alert(error.message)
         }
+    }
+}
 
+const FormEdit = {
+    description: document.querySelector('input#description-edit'),
+    amount: document.querySelector('input#amount-edit'),
+    date: document.querySelector('input#date-edit'),
 
+    getValues() {
+        return {
+            description: FormEdit.description.value,
+            amount: FormEdit.amount.value,
+            date: FormEdit.date.value
+        }
+    },
+
+    validateFilds() {
+        const { description, amount, date } = FormEdit.getValues()
+
+        if ( 
+            description.trim() === "" ||
+            amount.trim() === "" ||
+            date.trim() === "" ) {
+                throw new Error("Por favor, preencha todos os campos.")
+            }
+    },
+
+    formatValues() {
+        let { description, amount, date } = FormEdit.getValues()
+
+        amount = Utils.formatAmount(amount)
+
+        date = Utils.formatDate(date)
+
+        return {
+            description,
+            amount,
+            date
+        }
+    },
+
+    clearFields() {
+        FormEdit.description.value = ""
+        FormEdit.amount.value = ""
+        FormEdit.date.value = ""
+    },
+
+    submit(event) {
+        event.preventDefault()
+
+        try {
+            // Verificar se todas as informações foram preenchidas
+            FormEdit.validateFilds()
+            // Formatar os dados para salvar
+            const transaction = FormEdit.formatValues()
+            // Salvar
+            Transaction.editValue(transaction)
+            // Apagar os dados do formulário
+            FormEdit.clearFields()
+            // Modal feche
+            ModalEdit.close()
+
+        } catch (error) {
+            alert(error.message)
+        }
     }
 }
 
